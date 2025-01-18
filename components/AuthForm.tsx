@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import ImageUpload from "./ImageUpload";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
@@ -70,7 +71,14 @@ const AuthForm = <T extends FieldValues>({
                   </FormLabel>
                   <FormControl>
                     {field.name === "universityCard" ? (
-                      <FileUpload />
+                      <ImageUpload
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your ID"
+                        folder="ids"
+                        variant="dark"
+                        onFileChange={field.onChange}
+                      />
                     ) : (
                       <Input
                         required
@@ -82,9 +90,9 @@ const AuthForm = <T extends FieldValues>({
                       />
                     )}
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     This is your public display name.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
