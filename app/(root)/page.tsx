@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
 import BookOverview from "@/components/BookOverview";
 import BookList from "@/components/BookList";
+import { sampleBooks } from "@/constants";
 
 export default function Home() {
   const book: Book = {
@@ -37,8 +38,11 @@ export default function Home() {
         video={book.video}
         summary={book.summary}
       />
-      <BookList />
-      <Button> Click me !</Button>;
+      <BookList
+        title="Popular Books"
+        books={sampleBooks}
+        containerClassName="mt-28"
+      />
     </section>
   );
 }

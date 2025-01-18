@@ -43,7 +43,7 @@ const BookOverview = ({
           <p className="book-description">{description}</p>
         </div>
 
-        <Button>
+        <Button className="book-overview_btn">
           <Image src="/icons/book.svg" width={22} height={22} alt="book" />
           BORROW
         </Button>
