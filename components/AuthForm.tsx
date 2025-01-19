@@ -25,6 +25,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import ImageUpload from "./ImageUpload";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
@@ -43,6 +45,30 @@ const AuthForm = <T extends FieldValues>({
     defaultValues: defaultValues as DefaultValues<T>,
     resolver: zodResolver(schema),
   });
+  const router = useRouter();
+
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    const result = await onSubmit(data);
+    if (result.success) {
+      toast({
+        title: "Success",
+        description: isSignIn
+          ? "You have successfully signed in."
+          : "You have successfully signed up.",
+      });
+
+      router.push("/");
+    }
+
+    if (result.error) {
+      toast({
+        title: "Error",
+        description: isSignIn
+          ? "There was an error signing in."
+          : "There was an error signing up.",
+      });
+    }
+  };
 
   const isSignIn = type === "SIGN_IN";
 
@@ -58,7 +84,7 @@ const AuthForm = <T extends FieldValues>({
       </p>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           {Object.keys(defaultValues).map((field) => (
             <FormField
               key={field}
