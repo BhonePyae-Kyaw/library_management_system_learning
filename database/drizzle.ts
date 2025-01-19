@@ -4,4 +4,4 @@ import { neon } from "@neondatabase/serverless";
 
 const sql = neon(config.env.database_url);
 
-export const db = drizzle({ client: sql, casing: "snake_case" });
+export const db = drizzle({ client: sql });
