@@ -10,6 +10,7 @@ import {
 import config from "../lib/config";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 const authenticator = async () => {
   try {
@@ -77,13 +78,32 @@ const ImageUpload = ({
       authenticator={authenticator}
     >
       <IKUpload
+        className="hidden"
         ref={ikUploadRef}
         onError={onError}
         onSuccess={onSuccess}
         fileName="test-upload.png"
       />
 
-      <Button className="upload-btn">Upload a file</Button>
+      <Button
+        className="upload-btn"
+        onClick={(e) => {
+          e.preventDefault();
+
+          if (ikUploadRef.current) {
+            // @ts-ignore
+            ikUploadRef.current?.click();
+          }
+        }}
+      >
+        <Image
+          src="/icons/upload.svg"
+          width={20}
+          height={20}
+          alt="upload icon"
+        />
+        Upload a file
+      </Button>
       {file &&
         (type === "image" ? (
           <IKImage

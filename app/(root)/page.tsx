@@ -4,8 +4,12 @@ import { Book } from "lucide-react";
 import BookOverview from "@/components/BookOverview";
 import BookList from "@/components/BookList";
 import { sampleBooks } from "@/constants";
+import { db } from "@/database/drizzle";
+import { users } from "@/database/schema";
 
-export default function Home() {
+const Home = async () => {
+  const result = await db.select().from(users);
+  console.log(result);
   const book: Book = {
     id: 1,
     title: "The Midnight Library",
@@ -45,4 +49,6 @@ export default function Home() {
       />
     </section>
   );
-}
+};
+
+export default Home;
