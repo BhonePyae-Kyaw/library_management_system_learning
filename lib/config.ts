@@ -1,4 +1,3 @@
-import { resend } from "@upstash/qstash";
 const config = {
   env: {
     apiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT!,
@@ -12,10 +11,9 @@ const config = {
     upstash_url: process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL!,
     upstash_token: process.env.NEXT_PUBLIC_UPSTASH_TOKEN!,
 
-    qstash_url: process.env.Next_PUBLIC_QSTASH_URL!,
+    qstash_url: process.env.NEXT_PUBLIC_QSTASH_URL!,
     qstash_token: process.env.NEXT_PUBLIC_QSTASH_TOKEN!,
     resend_token: process.env.NEXT_PUBLIC_RESEND_TOKEN!,
-
   },
 };
 

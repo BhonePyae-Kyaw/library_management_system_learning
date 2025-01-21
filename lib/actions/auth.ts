@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 import ratelimit from "@/ratelimit";
 import { redirect } from "next/navigation";
 
-import { workflow } from "../workflow";
+import { workflowClient } from "../workflow";
 import config from "../config";
 
 export const signInWithCredentials = async (
@@ -41,6 +41,7 @@ export const signInWithCredentials2 = async (
 ) => {
   console.log("Sign in with credentials 2");
   console.log(params);
+  console.log(config.env.qstash_url);
   const { email, password } = params;
 
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
@@ -98,8 +99,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
       universityCard,
     });
 
-    await workflow.trigger({
-
+    await workflowClient.trigger({
       url: `${config.env.prodApiEndpoint}/api/workflow/onboarding`,
       body: {
         email,
@@ -107,8 +107,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
       },
     });
 
-    await signInWithCredentials({ email, password });
-
+    await signInWithCredentials2({ email, password });
 
     return {
       success: true,
@@ -116,7 +115,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
   } catch (error) {
     return {
       success: false,
-      error: "Sign up error.",
+      error: `Sign up error + ${config.env.qstash_url} + ${error}.`,
     };
   }
 };
