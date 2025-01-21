@@ -6,6 +6,7 @@ import config from "./config";
 export const workflow = new WorkflowClient({
   baseUrl: config.env.upstash_url,
   token: config.env.upstash_token,
+
 });
 
 const qstashClient = new QStashClient({
