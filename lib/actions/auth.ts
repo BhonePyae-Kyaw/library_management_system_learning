@@ -7,6 +7,8 @@ import { hash } from "bcryptjs";
 import { headers } from "next/headers";
 import ratelimit from "@/ratelimit";
 import { redirect } from "next/navigation";
+import { workflowClient } from "../workflow";
+import config from "../config";
 
 export const signInWithCredentials = async (
   params: Pick<AuthCredentials, "email" | "password">
@@ -36,6 +38,8 @@ export const signInWithCredentials = async (
 export const signInWithCredentials2 = async (
   params: Pick<AuthCredentials, "email" | "password">
 ) => {
+  console.log("Sign in with credentials 2");
+  console.log(params);
   const { email, password } = params;
 
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
@@ -93,7 +97,17 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
       universityCard,
     });
 
-    await signInWithCredentials({ email, password });
+    await workflowClient.trigger({
+      url: `${config.env.prodApiEndpoint}/api/workflow/onboarding`,
+      body: {
+        email,
+        fullName,
+      },
+    });
+
+    console.log("Triggering here");
+
+    await signInWithCredentials2({ email, password });
 
     return {
       success: true,
