@@ -7,7 +7,8 @@ import { hash } from "bcryptjs";
 import { headers } from "next/headers";
 import ratelimit from "@/ratelimit";
 import { redirect } from "next/navigation";
-import { workflowClient } from "../workflow";
+
+import { workflow } from "../workflow";
 import config from "../config";
 
 export const signInWithCredentials = async (
@@ -97,7 +98,8 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
       universityCard,
     });
 
-    await workflowClient.trigger({
+    await workflow.trigger({
+
       url: `${config.env.prodApiEndpoint}/api/workflow/onboarding`,
       body: {
         email,
@@ -105,9 +107,8 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
       },
     });
 
-    console.log("Triggering here");
+    await signInWithCredentials({ email, password });
 
-    await signInWithCredentials2({ email, password });
 
     return {
       success: true,
