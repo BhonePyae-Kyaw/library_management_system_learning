@@ -1,7 +1,7 @@
 const config = {
   env: {
-    apiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT!,
-    prodApiEndpoint: process.env.NEXT_PUBLIC_PROD_API_ENDPOINT!,
+    apiEndpoint: process.env.NEXT_PUBLIC_API_URL!,
+    prodApiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT!,
     imagekit: {
       publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
       privateKey: process.env.PRIVATE_IMAGEKIT_KEY!,
@@ -11,8 +11,8 @@ const config = {
     upstash_url: process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL!,
     upstash_token: process.env.NEXT_PUBLIC_UPSTASH_TOKEN!,
 
-    qstash_url: process.env.NEXT_PUBLIC_QSTASH_URL!,
-    qstash_token: process.env.NEXT_PUBLIC_QSTASH_TOKEN!,
+    qstash_url: process.env.QSTASH_URL!,
+    qstash_token: process.env.QSTASH_TOKEN!,
     resend_token: process.env.NEXT_PUBLIC_RESEND_TOKEN!,
   },
 };
