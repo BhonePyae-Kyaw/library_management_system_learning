@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Session } from "next-auth";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
@@ -9,7 +9,7 @@ import Sidebar from "@/components/admin/Sidebar";
 import Header from "@/components/admin/Header";
 import "@/styles/admin.css";
 
-const layout = async () => {
+const layout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
   if (!session?.user?.id) redirect("/sign-in");
@@ -29,6 +29,7 @@ const layout = async () => {
 
         <div className="admin-container">
           <Header session={session} />
+          {children}
         </div>
       </main>
     </div>
