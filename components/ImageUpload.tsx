@@ -11,6 +11,7 @@ import config from "../lib/config";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const authenticator = async () => {
   try {
@@ -25,7 +26,7 @@ const authenticator = async () => {
     const data = await response.json();
 
     const { signature, expire, token } = data;
-    return data;
+    return { signature, expire, token };
   } catch (error: any) {
     throw new Error(`Authentication failed: ${error.message}`);
   }
@@ -52,6 +53,16 @@ const ImageUpload = ({
 }: Props) => {
   const ikUploadRef = useRef(null);
   const [file, setFile] = useState<{ filePath: string } | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  const styles = {
+    button:
+      variant === "dark"
+        ? "bg-dark-300"
+        : "bg-light-600 border-gray-100 border",
+    placeholder: variant === "dark" ? "text-light-100" : "text-slate-500",
+    text: variant === "dark" ? "text-light-100" : "text-dark-400",
+  };
 
   const onError = (error: any) => {
     console.error("Error uploading file", error);
@@ -71,6 +82,31 @@ const ImageUpload = ({
     });
   };
 
+  const onValidate = (file: File) => {
+    if (type === "image") {
+      if (file.size > 20 * 1024 * 1024) {
+        toast({
+          title: "File size too large",
+          description: "Please upload a file that is less than 20MB in size",
+          variant: "destructive",
+        });
+
+        return false;
+      }
+    } else if (type === "video") {
+      if (file.size > 50 * 1024 * 1024) {
+        toast({
+          title: "File size too large",
+          description: "Please upload a file that is less than 50MB in size",
+          variant: "destructive",
+        });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return (
     <ImageKitProvider
       publicKey={config.env.imagekit.publicKey}
@@ -83,10 +119,19 @@ const ImageUpload = ({
         onError={onError}
         onSuccess={onSuccess}
         fileName="test-upload.png"
+        validateFile={onValidate}
+        useUniqueFileName={true}
+        onUploadStart={() => setProgress(0)}
+        onUploadProgress={({ loaded, total }) => {
+          const percent = Math.round((loaded / total) * 100);
+          setProgress(percent);
+        }}
+        folder={folder}
+        accept={accept}
       />
 
       <Button
-        className="upload-btn"
+        className={cn("upload-btn", styles.button)}
         onClick={(e) => {
           e.preventDefault();
 
@@ -98,12 +143,26 @@ const ImageUpload = ({
       >
         <Image
           src="/icons/upload.svg"
+          alt="upload-icon"
           width={20}
           height={20}
-          alt="upload icon"
+          className="object-contain"
         />
-        Upload a file
+        <p className={cn("text-base", styles.placeholder)}>{placeholder}</p>
+
+        {file && (
+          <p className={cn("upload-filename", styles.text)}>{file.filePath}</p>
+        )}
       </Button>
+
+      {progress > 0 && (
+        <div className="w-full rounded-full bg-green-200">
+          <div className="progress" style={{ width: `${progress}%` }}>
+            {progress}%
+          </div>
+        </div>
+      )}
+
       {file &&
         (type === "image" ? (
           <IKImage
