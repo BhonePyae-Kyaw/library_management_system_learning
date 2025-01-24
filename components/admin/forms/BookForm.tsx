@@ -23,6 +23,7 @@ import ImageUpload from "@/components/ImageUpload";
 //import { createBook } from "@/lib/admin/actions/book";
 import { toast } from "@/hooks/use-toast";
 import ColorPicker from "../ColorPicker";
+import { createBook } from "@/lib/admin/actions/book";
 
 interface Props extends Partial<Book> {
   type?: "create" | "update";
@@ -49,22 +50,22 @@ const BookForm = ({ type, ...book }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
     console.log(values);
-    // const result = await createBook(values);
+    const result = await createBook(values);
 
-    // if (result.success) {
-    //   toast({
-    //     title: "Success",
-    //     description: "Book created successfully",
-    //   });
+    if (result.success) {
+      toast({
+        title: "Success",
+        description: "Book created successfully",
+      });
 
-    //   router.push(`/admin/books/${result.data.id}`);
-    // } else {
-    //   toast({
-    //     title: "Error",
-    //     description: result.message,
-    //     variant: "destructive",
-    //   });
-    // }
+      router.push(`/admin/books/${result.data.id}`);
+    } else {
+      toast({
+        title: "Error",
+        description: result.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
