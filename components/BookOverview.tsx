@@ -8,12 +8,12 @@ const BookOverview = ({
   author,
   genre,
   rating,
-  total_copies,
-  available_copies,
+  availableCopies,
+  totalCopies,
   description,
-  color,
-  cover,
-  video,
+  coverColor,
+  coverUrl,
+  videoUrl,
   summary,
 }: Book) => {
   return (
@@ -35,9 +35,9 @@ const BookOverview = ({
           </div>
           <div>
             <p className="text-light-200">
-              Total Copies: <span>{total_copies}</span> |{" "}
+              Total Copies: <span>{totalCopies}</span> |{" "}
               <span>Available Copies: </span>
-              {available_copies}
+              {availableCopies}
             </p>
           </div>
           <p className="book-description">{description}</p>
@@ -51,13 +51,13 @@ const BookOverview = ({
       <div className="relative flex flex-1 justify-center">
         <div className="relative">
           <BookCover
-            color={color}
-            cover={cover}
+            color={coverColor}
+            cover={coverUrl}
             variant="wide"
             className="z-10"
           />
           <div className="absolute left-16 top-10 rotate-12 opacity-40 max-sm:hidden">
-            <BookCover variant="wide" cover={cover} color={color} />
+            <BookCover variant="wide" cover={coverUrl} color={coverColor} />
           </div>
         </div>
       </div>
